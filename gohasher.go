@@ -9,7 +9,7 @@ func HashString(string string, hashMethod string) (int, error) {
 	result := 0
 
 	if hashMethod == "fnv1" {
-		result, err := HashStringToFnv1Int64(string)
+		result, err := hashStringToFnv1Int64(string)
 		if err != nil {
 			return int(result), errors.New("can not hash given string")
 		} else {
@@ -20,7 +20,7 @@ func HashString(string string, hashMethod string) (int, error) {
 	}
 }
 
-func HashStringToFnv1Int64(url string) (int64, error) {
+func hashStringToFnv1Int64(url string) (int64, error) {
 	h := fnv.New64a()
 	_, err := h.Write([]byte(url))
 

@@ -1,17 +1,26 @@
-package cmd
+package main
 
 import (
 	"encoding/json"
-	"github.com/R-Romanov/gohashing"
-	"github.com/R-Romanov/gohashing/internal/hasherResponse"
+	"flag"
+	"fmt"
+	"github.com/R-Romanov/gohasher"
+	"github.com/R-Romanov/gohasher/internal/hasherResponse"
 	"net/http"
+	"strconv"
 )
 
 func main() {
+	port := flag.Int("port", 8080, "an int")
+	flag.Parse()
+
 	http.HandleFunc("/get-hash/", getHashHandler)
 	http.HandleFunc("/hash-methods-list/", hashMethodsListHandler)
 
-	err := http.ListenAndServe(":8080", nil)
+	portAddress := ":" + strconv.Itoa(*port)
+	fmt.Printf("Start server on port %d", *port)
+
+	err := http.ListenAndServe(portAddress, nil)
 
 	if err != nil {
 		panic("can not run http server")
