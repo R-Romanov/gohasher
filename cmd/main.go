@@ -1,8 +1,8 @@
-package gohashing
+package cmd
 
 import (
 	"encoding/json"
-	"github.com/R-Romanov/gohashing/internal/hasher"
+	"github.com/R-Romanov/gohashing"
 	"github.com/R-Romanov/gohashing/internal/hasherResponse"
 	"net/http"
 )
@@ -40,7 +40,7 @@ func getHashHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	hashMethod := hashMethods[0]
 
-	dataHashed, err := hasher.HashString(data, hashMethod)
+	dataHashed, err := gohasher.HashString(data, hashMethod)
 
 	if err != nil {
 		response.SetError(err.Error())
