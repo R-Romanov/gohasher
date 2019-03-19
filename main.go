@@ -1,4 +1,4 @@
-package main
+package gohashing
 
 import (
 	"encoding/json"
