@@ -48,6 +48,10 @@ If the request is not successful, response will be in json format with error mes
 
 ## Use as package ##
 
-1. Import package "github.com/R-Romanov/gohasher" with dep
-2. Use gohasher.HashString() to hash string with certain hash method
-```gohasher.HashString("any-string", "fnv1")```
+1. Import package:
+ 
+        import "github.com/R-Romanov/gohasher/pkg/hasher"
+
+2. Call hashing function:
+
+        h, err := hasher.Hash("example.com")

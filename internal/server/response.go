@@ -1,22 +1,28 @@
 package server
 
+const (
+	StatusOk    = "ok"
+	StatusError = "error"
+)
+
 type Response struct {
-	HashedString int    `json:"hash,omitempty"`
-	Error        string `json:"error,omitempty"`
+	Status  string `json:"status,omitempty"`
+	Message string `json:"message,omitempty"`
+	Hash    int    `json:"hash,omitempty"`
 }
 
 func NewResponse() *Response {
 	ext := &Response{}
-	ext.HashedString = 0
-	ext.Error = ""
+	ext.Status = StatusOk
 
 	return ext
 }
 
-func (c *Response) SetHashedString(hash int) {
-	c.HashedString = hash
+func (c *Response) SetHash(hash int) {
+	c.Hash = hash
 }
 
 func (c *Response) SetError(err string) {
-	c.Error = err
+	c.Status = StatusError
+	c.Message = err
 }
