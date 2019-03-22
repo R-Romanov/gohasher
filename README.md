@@ -1,16 +1,18 @@
-## Usage as web service ##
+## Use as web server ##
 
-1. Build app
+1. Build the app
     ```bash
     go build -o ./build/gohasher ./cmd/main.go
     ```
-1. Run app
+
+1. Run local server
+
     ```bash
-    cd ./build
-    ./gohasher
+    ./build/gohasher
     ```
     
-    Or run app on certain port:
+    Run server on certain port:
+
     ```bash
     ./gohasher -port=9090
     ```
@@ -44,7 +46,7 @@ If the request is not successful, response will be in json format with error mes
 
 ```{"error":"url param 'data' is missing"}```
 
-## Usage as golang package ##
+## Use as package ##
 
 1. Import package "github.com/R-Romanov/gohasher" with dep
 2. Use gohasher.HashString() to hash string with certain hash method
