@@ -5,17 +5,17 @@ import (
 	"flag"
 	"fmt"
 	"github.com/R-Romanov/gohasher"
-	"github.com/R-Romanov/gohasher/internal/hasherResponse"
+	"github.com/R-Romanov/gohasher/internal/server"
 	"net/http"
 	"strconv"
 )
 
 func main() {
-	port := flag.Int("port", 8080, "an int")
+	port := flag.Int("port", 8080, "port number")
 	flag.Parse()
 
+	http.HandleFunc("/", algoListHandler)
 	http.HandleFunc("/get-hash/", getHashHandler)
-	http.HandleFunc("/hash-methods-list/", hashMethodsListHandler)
 
 	portAddress := ":" + strconv.Itoa(*port)
 	fmt.Printf("Start server on port %d", *port)
@@ -25,11 +25,10 @@ func main() {
 	if err != nil {
 		panic("can not run http server")
 	}
-
 }
 
 func getHashHandler(w http.ResponseWriter, r *http.Request) {
-	response := hasherResponse.NewHasherResponse()
+	response := server.NewResponse()
 
 	datum, ok := r.URL.Query()["data"]
 
@@ -40,14 +39,14 @@ func getHashHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	data := datum[0]
 
-	hashMethods, ok := r.URL.Query()["method"]
+	algoParam, ok := r.URL.Query()["algo"]
 
-	if !ok || len(hashMethods[0]) < 1 {
+	if !ok || len(algoParam[0]) < 1 {
 		response.SetError("url param 'method' is missing")
 		echoResponse(w, response)
 		return
 	}
-	hashMethod := hashMethods[0]
+	hashMethod := algoParam[0]
 
 	dataHashed, err := gohasher.HashString(data, hashMethod)
 
@@ -62,11 +61,9 @@ func getHashHandler(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func hashMethodsListHandler(w http.ResponseWriter, r *http.Request) {
-	listString :=
-		`The following encryption methods are available:
-	- fnv1 : non-cryptographic hash function (int64)
-`
+func algoListHandler(w http.ResponseWriter, r *http.Request) {
+	listString := "Algorithms available:" +
+		"\n- fnv1 : non-cryptographic 64-bit hash function (default)"
 
 	_, err := w.Write([]byte(listString))
 	if err != nil {
@@ -74,7 +71,7 @@ func hashMethodsListHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func echoResponse(w http.ResponseWriter, response *hasherResponse.HasherResponse) {
+func echoResponse(w http.ResponseWriter, response *server.Response) {
 	responseMarshaled, err := json.Marshal(*response)
 	if err != nil {
 		panic(err)
